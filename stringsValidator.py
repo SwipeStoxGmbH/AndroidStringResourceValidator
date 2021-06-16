@@ -82,22 +82,22 @@ def validate_languages():
         second_language_tree = ET.parse('{}/values-{}/strings.xml'.format(path, language))
         second_language_root = second_language_tree.getroot()
 
-        for defaultLanguageString in defaultLanguageKeys:
-            string_key = defaultLanguageString.attrib['name']
-            if defaultLanguageString.text is None:
+        for default_language_string in defaultLanguageKeys:
+            string_key = default_language_string.attrib['name']
+            if default_language_string.text is None:
                 continue
-            if 'translatable' in defaultLanguageString.attrib and defaultLanguageString.attrib[
+            if 'translatable' in default_language_string.attrib and default_language_string.attrib[
                 'translatable'] == 'false':
                 continue
             if check_if_string_exists_in_second_language(second_language_root, string_key):
                 contains_placeholder = any(
-                    placeholder in defaultLanguageString.text for placeholder in full_list_of_placeholders)
+                    placeholder in default_language_string.text for placeholder in full_list_of_placeholders)
                 if not contains_placeholder:
                     continue
                 second_language_string = second_language_root.findall("./*[@name='{}']".format(string_key))
                 if second_language_string is None:
                     continue
-                validate_placeholders(defaultLanguageString.text, second_language_string[0].text, string_key, language)
+                validate_placeholders(default_language_string.text, second_language_string[0].text, string_key, language)
 
 
 def check_if_string_exists_in_second_language(second_language_root, string_key):
